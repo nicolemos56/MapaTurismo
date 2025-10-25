@@ -1,8 +1,16 @@
 # Métricas Ambientais e de Sustentabilidade 
-Métrica	Descrição	Fórmula	Fonte de dados
-Carrying Capacity (CC)	Nº máximo de visitantes sustentáveis por área	CC = A / (V × D)	OSM + Sentinel
-Vulnerability Index (VI)	Peso combinado de fatores ambientais	VI = Σ(wᵢ × xᵢ)	Sentinel + ERA5
-Land Change Rate (LCR)	Variação no uso do solo	LCR = (ΔÁrea_urbana / Δt)	Sentinel 2 / GEE
+
+  Métrica     Descrição                 Fórmula                  Fonte de Dados          
+-------------|----------------------|-------------------------|------------------|
+Carrying     |Nº máximo             |CC = A / (V × D)         |OSM + Sentinel    |
+Capacity     |de visitantes         |                         |                  |
+(CC)         |sustentáveis por área |                         |                  | 
+-------------|----------------------|-------------------------|------------------|
+Vulnerability| Peso combinado de    |VI = Σ(wᵢ × xᵢ)          |Sentinel + ERA5   |
+Index(VI)    |fatores ambientais    |                         |                  |
+-------------|----------------------|-------------------------|------------------|
+Land Change  |Variação no uso do    |LCR = (ΔÁrea_urbana / Δt)|Sentinel 2 / GEE  |
+Rate(LCR)    |solo                  |                         |                  |
 
 # Essas métricas mostram que o modelo não é só econômico, mas também ecológico.
 
