@@ -1,50 +1,8 @@
 # requirements.txt
-# Dependências sugeridas para projeto de mapeamento geoespacial e análise preditiva (Angola)
-numpy
-pandas
-scikit-learn
-xgboost
-lightgbm
-imbalanced-learn
-shap
-category-encoders
-joblib
-tqdm
 
-# Geoespacial
-geopandas
-shapely
-fiona
-pyproj
-rtree
-rasterio
-contextily
-
-# Visualização / mapas
-matplotlib
-seaborn
-plotly
-folium
-branca
-ipyleaflet
-
-# I/O / Web / Scraping / Geocoding
-requests
-beautifulsoup4
-geopy
-openpyxl
-xlrd
-
-# DB / APIs
-sqlalchemy
-psycopg2-binary
-
-# Ambiente / utilitários
-python-dotenv
-notebook
-jupyterlab
-streamlit
-
-# Extras úteis
-scikit-image
-seaborn
+osmnx 
+geopandas 
+pandas 
+shapely.geometry
+pathlib
+#to be continued
