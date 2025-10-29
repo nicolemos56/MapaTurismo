@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "pontos_turisticos_angola_features",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": null, "name": "Quedas de Calandula", "tourism": null, "amenity": null, "leisure": null, "natural": null, "landuse": null, "highway": null, "waterway": "waterfall", "power": null, "man_made": null, "railway": null, "building": null, "ponto_turistico": "Quedas de Calandula", "localidade": "Malanje, Angola", "fonte_dados": "OpenStreetMap", "latitude": -9.0740668, "longitude": 16.000316, "is_touristic": 0, "is_infrastructure": 0, "centroid_x": 1781147.0296514682, "centroid_y": -1014369.7741892787, "dist_to_nearest_poi": null, "pois_within_1km": 0, "hospital_nearby": 0, "school_nearby": 0 }, "geometry": { "type": "Point", "coordinates": [ 16.000316, -9.0740668 ] } }
+]
+}
