@@ -1,0 +1,16 @@
+﻿Nome,Província,Distância_Estrada_Principal_(km),Distância_Cidade_(km),Acessibilidade,Tipo_Via_Acesso,Infraestrutura,Serviços_Disponíveis,Densidade_Populacional_(hab/km²)
+Baía Azul,Benguela,1.2,7.5,Boa,Pavimentada,Completa,"Energia, telecom, hospedagem",340
+Cristo Rei,Benguela,0.8,5.0,Boa,Pavimentada,Completa,"Energia, telecom, transporte",380
+Quedas de Kalandula,Malanje,6.5,75.0,Média,Terra batida,Básica,"Energia parcial, turismo",95
+Serra da Leba,Huíla,1.0,15.0,Boa,Pavimentada,Média,"Telecom, energia",120
+Miradouro da Lua,Luanda,2.5,45.0,Boa,Pavimentada,Completa,"Energia, telecom",430
+Pedras Negras de Pungo Andongo,Malanje,4.8,90.0,Média,Terra batida,Básica,Energia parcial,110
+Quissama Parque Nacional,Luanda,5.5,110.0,Difícil,Terra batida,Limitada,Telecom esporádico,60
+Lagoa do Carumbo,Lunda Norte,8.2,160.0,Difícil,Trilho / terra,Básica,"Sem energia, telecom limitada",45
+Tundavala,Huíla,1.8,12.0,Boa,Pavimentada,Média,"Telecom, energia",130
+Cachoeira do Binga,Cuanza Sul,3.7,70.0,Média,Terra batida,Média,"Energia parcial, turismo",85
+Cataratas do Ruacaná,Cunene,4.0,90.0,Média,Terra batida,Básica,Energia e telecom limitados,55
+Morro do Moco,Huambo,5.5,30.0,Média,Terra batida,Básica,Energia parcial,150
+Fenda da Tundavala,Huíla,2.2,10.0,Boa,Pavimentada,Média,"Telecom, energia",125
+Praia Morena,Benguela,0.5,2.5,Boa,Pavimentada,Completa,"Energia, telecom, hospedagem",410
+Ilha do Mussulo,Luanda,1.0,15.0,Boa,Pavimentada,Completa,"Energia, telecom, hospedagem",520
