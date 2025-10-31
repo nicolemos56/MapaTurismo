@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "pontos_turisticos_angola_normalizado",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": null, "name": "Quedas de Calandula", "tourism": null, "amenity": null, "leisure": null, "natural": null, "landuse": null, "highway": null, "waterway": "waterfall", "power": null, "man_made": null, "railway": null, "building": null, "ponto_turistico": "Quedas de Calandula", "provincia": "Malanje", "fonte_dados": "OpenStreetMap", "latitude": -9.0740668, "longitude": 16.000316, "is_touristic": 0, "is_infrastructure": 0 }, "geometry": { "type": "Point", "coordinates": [ 16.000316, -9.0740668 ] } }
+]
+}
