@@ -1,16 +1,16 @@
-"Categoria","Valor"
-"População Total (Censo 2014)","25.789.024 habitantes"
-"População Estimada (2024)","≈ 35.100.000 habitantes"
-"Taxa de Emprego (2024, 3º Trimestre)","62,0%"
-"Taxa de Emprego (2025, 2º Trimestre)","63,2%"
-"Taxa de Desemprego (2025, 2º Trimestre)","28,8%"
-"Contributo do Turismo no PIB","< 1% do PIB nacional"
-"Crescimento do PIB Nacional (2024)","4,4%"
-"Receitas do Turismo (2020-2021)","314 mil milhões Kz (~361,4 milhões €)"
-"Número de Hóspedes (2020-2021)","1,7 milhões"
-"Dormidas em Estabelecimentos (2020-2021)","3,5 milhões"
-"Visitantes Estrangeiros (1º Semestre 2025)","100.079 visitantes (+32,3% face a 2024)"
-"Principais Países de Origem (2025)","Portugal, Brasil, China e África do Sul (45,5%)"
-"Turistas em Benguela (2024)","34.000 turistas (nacionais e estrangeiros)"
-"Turistas no Namibe (Agosto 2025)","26.414 turistas (2.970 estrangeiros)"
-"Turistas Estrangeiros Estimados (2019)","218.000 turistas"
+nome,provincia,populacao,densidade_pop,pib_per_capita,idh,taxa_urbanizacao,emprego_turismo
+Quedas de Calandula,Malanje,129958,77.1,1898.31,0.522,80.6,3.2
+Miradouro da Lua,Luanda,154867,298.1,1471.82,0.655,68.6,8.1
+Museu Kulumbimbi,Zaire,139932,39.5,3055.16,0.633,44.6,7.7
+Reserva Parcial do Namibe,Namibe,111694,329.1,2347.39,0.7,59.2,6.5
+Fortaleza de São Miguel,Luanda,127879,423.3,4149.69,0.502,56.3,3.2
+Ilha do Mussulo,Luanda,118268,15.3,2600.29,0.567,82.7,5.4
+Cânion do Rio Kalandula,Malanje,215892,446.6,3779.82,0.505,75.7,11.5
+Parque Nacional da Quiçama,Luanda,62886,283.6,3240.92,0.677,69.8,12.5
+Cristo Rei,Huambo,145337,281.1,2551.5,0.578,57.4,10.3
+Serra da Leba,Huíla,221458,18.1,1239.79,0.512,60.2,14.1
+Fenda da Tundavala,Huíla,176266,25.0,4026.61,0.62,82.9,10.8
+Baía Azul,Benguela,95498,243.3,2889.86,0.459,61.4,14.0
+Quedas do Rio Chiumbe,Moxico,120727,188.9,2356.25,0.703,41.6,13.2
+Parque Nacional de Cameia,Moxico,134324,35.3,1247.9,0.585,42.8,8.4
+Grutas do Nzenzo,Uíge,183203,438.6,1892.68,0.569,34.9,4.1
