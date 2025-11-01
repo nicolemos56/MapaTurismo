@@ -1,4 +1,4 @@
-# 📘 README — model_input.csv
+# model_input.csv
 
 ##  Descrição Geral
 
