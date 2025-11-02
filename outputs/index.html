@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_69d740a996a2aa4ce8ff20ab3fc58e21 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_69d740a996a2aa4ce8ff20ab3fc58e21" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_69d740a996a2aa4ce8ff20ab3fc58e21 = L.map(
+                "map_69d740a996a2aa4ce8ff20ab3fc58e21",
+                {
+                    center: [-11.2027, 17.8739],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_694e8944f2690d10bf7920a6474509b6 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_694e8944f2690d10bf7920a6474509b6.addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var marker_0c8cd01eda88a9e1c68ceaddda11ec72 = L.marker(
+                [-9.075025, 16.001131],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_b9d66ee7843ea87cd1e04c7d8d399b49 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bbb928c8cdeabf29fa28401e1762a93c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_999f59a34b8b5fc3464171adfcc39e3d = $(`<div id="html_999f59a34b8b5fc3464171adfcc39e3d" style="width: 100.0%; height: 100.0%;">     <h4>📍 Quedas de Calandula</h4>     <b>Província:</b> Malanje<br>     <hr>     <b>IDH Real (nos dados):</b> 0.543<br>     <b>Potencial Predito (IDH):</b> <b>0.609</b>     </div>`)[0];
+                popup_bbb928c8cdeabf29fa28401e1762a93c.setContent(html_999f59a34b8b5fc3464171adfcc39e3d);
+            
+        
+
+        marker_0c8cd01eda88a9e1c68ceaddda11ec72.bindPopup(popup_bbb928c8cdeabf29fa28401e1762a93c)
+        ;
+
+        
+    
+    
+            marker_0c8cd01eda88a9e1c68ceaddda11ec72.bindTooltip(
+                `<div>
+                     Quedas de Calandula
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0c8cd01eda88a9e1c68ceaddda11ec72.setIcon(icon_b9d66ee7843ea87cd1e04c7d8d399b49);
+            
+    
+            var marker_a09b986099f6fa46522cd1e254f08e5a = L.marker(
+                [-9.221147, 13.090001],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_7f896796ed93657d11c152e3159ccc9a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d1ff2447639cf0a8ab2734fcbe4a2664 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a339fbb4d786c0dd13de560b2321beed = $(`<div id="html_a339fbb4d786c0dd13de560b2321beed" style="width: 100.0%; height: 100.0%;">     <h4>📍 Miradouro da Lua</h4>     <b>Província:</b> Luanda<br>     <hr>     <b>IDH Real (nos dados):</b> 0.590<br>     <b>Potencial Predito (IDH):</b> <b>0.625</b>     </div>`)[0];
+                popup_d1ff2447639cf0a8ab2734fcbe4a2664.setContent(html_a339fbb4d786c0dd13de560b2321beed);
+            
+        
+
+        marker_a09b986099f6fa46522cd1e254f08e5a.bindPopup(popup_d1ff2447639cf0a8ab2734fcbe4a2664)
+        ;
+
+        
+    
+    
+            marker_a09b986099f6fa46522cd1e254f08e5a.bindTooltip(
+                `<div>
+                     Miradouro da Lua
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a09b986099f6fa46522cd1e254f08e5a.setIcon(icon_7f896796ed93657d11c152e3159ccc9a);
+            
+    
+            var marker_a431dcdb7ce66bb33a78796759dd0a3c = L.marker(
+                [-6.264389, 14.245581],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_68f077c10fdf344d4f9c7a11a54a0db4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a5c9bb44ff59a51ccfebe93a3d71199f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b70b13ea7619f1fb02f95b136f22bef6 = $(`<div id="html_b70b13ea7619f1fb02f95b136f22bef6" style="width: 100.0%; height: 100.0%;">     <h4>📍 Museu Kulumbimbi</h4>     <b>Província:</b> Zaire<br>     <hr>     <b>IDH Real (nos dados):</b> 0.726<br>     <b>Potencial Predito (IDH):</b> <b>0.670</b>     </div>`)[0];
+                popup_a5c9bb44ff59a51ccfebe93a3d71199f.setContent(html_b70b13ea7619f1fb02f95b136f22bef6);
+            
+        
+
+        marker_a431dcdb7ce66bb33a78796759dd0a3c.bindPopup(popup_a5c9bb44ff59a51ccfebe93a3d71199f)
+        ;
+
+        
+    
+    
+            marker_a431dcdb7ce66bb33a78796759dd0a3c.bindTooltip(
+                `<div>
+                     Museu Kulumbimbi
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a431dcdb7ce66bb33a78796759dd0a3c.setIcon(icon_68f077c10fdf344d4f9c7a11a54a0db4);
+            
+    
+            var marker_f3d3013bb68f4b2f36d974d87018d885 = L.marker(
+                [-15.76676, 12.399914],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_98e8ad296838cb6d98498258784e05b4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1b3443f59d2d9fdbbc6be167bc6d70f9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ef8d548dbbc3b47dc4d209ea9b8f5fac = $(`<div id="html_ef8d548dbbc3b47dc4d209ea9b8f5fac" style="width: 100.0%; height: 100.0%;">     <h4>📍 Reserva Parcial do Namibe</h4>     <b>Província:</b> Namibe<br>     <hr>     <b>IDH Real (nos dados):</b> 0.624<br>     <b>Potencial Predito (IDH):</b> <b>0.604</b>     </div>`)[0];
+                popup_1b3443f59d2d9fdbbc6be167bc6d70f9.setContent(html_ef8d548dbbc3b47dc4d209ea9b8f5fac);
+            
+        
+
+        marker_f3d3013bb68f4b2f36d974d87018d885.bindPopup(popup_1b3443f59d2d9fdbbc6be167bc6d70f9)
+        ;
+
+        
+    
+    
+            marker_f3d3013bb68f4b2f36d974d87018d885.bindTooltip(
+                `<div>
+                     Reserva Parcial do Namibe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f3d3013bb68f4b2f36d974d87018d885.setIcon(icon_98e8ad296838cb6d98498258784e05b4);
+            
+    
+            var marker_19ad0b860177d86bf1445d98d4189158 = L.marker(
+                [-8.808343416048587, 13.223444621289628],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_9c0af195a8d54e67d3d175d48cfabbb5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_10429218e0b56e043959aeb43ee34962 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d88f54d8863ee098a8185063b06e4570 = $(`<div id="html_d88f54d8863ee098a8185063b06e4570" style="width: 100.0%; height: 100.0%;">     <h4>📍 Fortaleza de São Miguel</h4>     <b>Província:</b> Luanda<br>     <hr>     <b>IDH Real (nos dados):</b> 0.678<br>     <b>Potencial Predito (IDH):</b> <b>0.663</b>     </div>`)[0];
+                popup_10429218e0b56e043959aeb43ee34962.setContent(html_d88f54d8863ee098a8185063b06e4570);
+            
+        
+
+        marker_19ad0b860177d86bf1445d98d4189158.bindPopup(popup_10429218e0b56e043959aeb43ee34962)
+        ;
+
+        
+    
+    
+            marker_19ad0b860177d86bf1445d98d4189158.bindTooltip(
+                `<div>
+                     Fortaleza de São Miguel
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_19ad0b860177d86bf1445d98d4189158.setIcon(icon_9c0af195a8d54e67d3d175d48cfabbb5);
+            
+    
+            var marker_55add3f5136e075f9f86d2aee26caada = L.marker(
+                [-8.964635, 13.050462],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_4addb1832f00e5b325335ee8e229b0d1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fa2cf394c3e6af7c7276926c3f1c744f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6b807ebd43d51f70dd4eda269232ded4 = $(`<div id="html_6b807ebd43d51f70dd4eda269232ded4" style="width: 100.0%; height: 100.0%;">     <h4>📍 Ilha do Mussulo</h4>     <b>Província:</b> Luanda<br>     <hr>     <b>IDH Real (nos dados):</b> 0.709<br>     <b>Potencial Predito (IDH):</b> <b>0.666</b>     </div>`)[0];
+                popup_fa2cf394c3e6af7c7276926c3f1c744f.setContent(html_6b807ebd43d51f70dd4eda269232ded4);
+            
+        
+
+        marker_55add3f5136e075f9f86d2aee26caada.bindPopup(popup_fa2cf394c3e6af7c7276926c3f1c744f)
+        ;
+
+        
+    
+    
+            marker_55add3f5136e075f9f86d2aee26caada.bindTooltip(
+                `<div>
+                     Ilha do Mussulo
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_55add3f5136e075f9f86d2aee26caada.setIcon(icon_4addb1832f00e5b325335ee8e229b0d1);
+            
+    
+            var marker_1d0a695c8230eb68bcdf21ac076145f8 = L.marker(
+                [-9.074959, 16.001378],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_92202d97eda184f5fa93dd9238d8e9f4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5d7c53a88f1a62ca1ff14abf5a591388 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a86fb6e8eae7b2cd871c970dcbfc9052 = $(`<div id="html_a86fb6e8eae7b2cd871c970dcbfc9052" style="width: 100.0%; height: 100.0%;">     <h4>📍 Cânion do Rio Kalandula</h4>     <b>Província:</b> Malanje<br>     <hr>     <b>IDH Real (nos dados):</b> 0.702<br>     <b>Potencial Predito (IDH):</b> <b>0.676</b>     </div>`)[0];
+                popup_5d7c53a88f1a62ca1ff14abf5a591388.setContent(html_a86fb6e8eae7b2cd871c970dcbfc9052);
+            
+        
+
+        marker_1d0a695c8230eb68bcdf21ac076145f8.bindPopup(popup_5d7c53a88f1a62ca1ff14abf5a591388)
+        ;
+
+        
+    
+    
+            marker_1d0a695c8230eb68bcdf21ac076145f8.bindTooltip(
+                `<div>
+                     Cânion do Rio Kalandula
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1d0a695c8230eb68bcdf21ac076145f8.setIcon(icon_92202d97eda184f5fa93dd9238d8e9f4);
+            
+    
+            var marker_0e4de5e45acbc56c2b0f410ee69ac313 = L.marker(
+                [-9.750007, 13.583333],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_db10049be484c223e39b7ed096f087f5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_908cafb90670c39277e0a96d687f4981 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a37e4ecdc4c6297dc26947a10c38c173 = $(`<div id="html_a37e4ecdc4c6297dc26947a10c38c173" style="width: 100.0%; height: 100.0%;">     <h4>📍 Parque Nacional da Quiçama</h4>     <b>Província:</b> Luanda<br>     <hr>     <b>IDH Real (nos dados):</b> 0.720<br>     <b>Potencial Predito (IDH):</b> <b>0.691</b>     </div>`)[0];
+                popup_908cafb90670c39277e0a96d687f4981.setContent(html_a37e4ecdc4c6297dc26947a10c38c173);
+            
+        
+
+        marker_0e4de5e45acbc56c2b0f410ee69ac313.bindPopup(popup_908cafb90670c39277e0a96d687f4981)
+        ;
+
+        
+    
+    
+            marker_0e4de5e45acbc56c2b0f410ee69ac313.bindTooltip(
+                `<div>
+                     Parque Nacional da Quiçama
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0e4de5e45acbc56c2b0f410ee69ac313.setIcon(icon_db10049be484c223e39b7ed096f087f5);
+            
+    
+            var marker_23a54864d9b0d796158e13f97d6734ca = L.marker(
+                [-14.940039, 13.51186],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_fd36d4b6e13d484cfbe7fe7adf8fcf76 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4af0144c2126fb18e7f5b6d5f8c35c35 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_13db0f2ede153950069513431a2ddcf0 = $(`<div id="html_13db0f2ede153950069513431a2ddcf0" style="width: 100.0%; height: 100.0%;">     <h4>📍 Cristo Rei</h4>     <b>Província:</b> Huambo<br>     <hr>     <b>IDH Real (nos dados):</b> 0.548<br>     <b>Potencial Predito (IDH):</b> <b>0.586</b>     </div>`)[0];
+                popup_4af0144c2126fb18e7f5b6d5f8c35c35.setContent(html_13db0f2ede153950069513431a2ddcf0);
+            
+        
+
+        marker_23a54864d9b0d796158e13f97d6734ca.bindPopup(popup_4af0144c2126fb18e7f5b6d5f8c35c35)
+        ;
+
+        
+    
+    
+            marker_23a54864d9b0d796158e13f97d6734ca.bindTooltip(
+                `<div>
+                     Cristo Rei
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_23a54864d9b0d796158e13f97d6734ca.setIcon(icon_fd36d4b6e13d484cfbe7fe7adf8fcf76);
+            
+    
+            var marker_7d2f8be66d2601bb43243563c4f9899b = L.marker(
+                [-15.0788, 13.2397],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_90c7d9d31114ec6f3790041462f29896 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_85264a8c3478911a251fb56a4e31b169 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_52f44d171844ca21ba5d44b9964bf147 = $(`<div id="html_52f44d171844ca21ba5d44b9964bf147" style="width: 100.0%; height: 100.0%;">     <h4>📍 Serra da Leba</h4>     <b>Província:</b> Huíla<br>     <hr>     <b>IDH Real (nos dados):</b> 0.686<br>     <b>Potencial Predito (IDH):</b> <b>0.631</b>     </div>`)[0];
+                popup_85264a8c3478911a251fb56a4e31b169.setContent(html_52f44d171844ca21ba5d44b9964bf147);
+            
+        
+
+        marker_7d2f8be66d2601bb43243563c4f9899b.bindPopup(popup_85264a8c3478911a251fb56a4e31b169)
+        ;
+
+        
+    
+    
+            marker_7d2f8be66d2601bb43243563c4f9899b.bindTooltip(
+                `<div>
+                     Serra da Leba
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7d2f8be66d2601bb43243563c4f9899b.setIcon(icon_90c7d9d31114ec6f3790041462f29896);
+            
+    
+            var marker_e6e9fd7eab5581a9943934b240377b4f = L.marker(
+                [-14.817465, 13.381539],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_57337bd51afce42edb4d88f50fd2ad98 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fca362361d783815dde9f75df0f2a891 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7eb14b9ad460c6df67ba3dc96a876098 = $(`<div id="html_7eb14b9ad460c6df67ba3dc96a876098" style="width: 100.0%; height: 100.0%;">     <h4>📍 Fenda da Tundavala</h4>     <b>Província:</b> Huíla<br>     <hr>     <b>IDH Real (nos dados):</b> 0.452<br>     <b>Potencial Predito (IDH):</b> <b>0.509</b>     </div>`)[0];
+                popup_fca362361d783815dde9f75df0f2a891.setContent(html_7eb14b9ad460c6df67ba3dc96a876098);
+            
+        
+
+        marker_e6e9fd7eab5581a9943934b240377b4f.bindPopup(popup_fca362361d783815dde9f75df0f2a891)
+        ;
+
+        
+    
+    
+            marker_e6e9fd7eab5581a9943934b240377b4f.bindTooltip(
+                `<div>
+                     Fenda da Tundavala
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e6e9fd7eab5581a9943934b240377b4f.setIcon(icon_57337bd51afce42edb4d88f50fd2ad98);
+            
+    
+            var marker_0d4224e1dba097f35e7b1f05f95b8d26 = L.marker(
+                [-12.627978, 13.234185],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_fed8daadd27bb036e5a328eb200323e1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2a3b8322120cd7cf8c5d03c7442bead3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a30fd63cf11b76dca0253b4c32a488f8 = $(`<div id="html_a30fd63cf11b76dca0253b4c32a488f8" style="width: 100.0%; height: 100.0%;">     <h4>📍 Baía Azul</h4>     <b>Província:</b> Benguela<br>     <hr>     <b>IDH Real (nos dados):</b> 0.677<br>     <b>Potencial Predito (IDH):</b> <b>0.625</b>     </div>`)[0];
+                popup_2a3b8322120cd7cf8c5d03c7442bead3.setContent(html_a30fd63cf11b76dca0253b4c32a488f8);
+            
+        
+
+        marker_0d4224e1dba097f35e7b1f05f95b8d26.bindPopup(popup_2a3b8322120cd7cf8c5d03c7442bead3)
+        ;
+
+        
+    
+    
+            marker_0d4224e1dba097f35e7b1f05f95b8d26.bindTooltip(
+                `<div>
+                     Baía Azul
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0d4224e1dba097f35e7b1f05f95b8d26.setIcon(icon_fed8daadd27bb036e5a328eb200323e1);
+            
+    
+            var marker_0cfa7e19a465d86d974b600f00c3b556 = L.marker(
+                [-11.02138, 20.20318],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_b106750ce861a394f272d4f4ca66937a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4995798ac2fb81a1772ee4bfc9aa4746 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_20ca7d9db395f9abcd3d20fd61a15e1c = $(`<div id="html_20ca7d9db395f9abcd3d20fd61a15e1c" style="width: 100.0%; height: 100.0%;">     <h4>📍 Quedas do Rio Chiumbe</h4>     <b>Província:</b> Moxico<br>     <hr>     <b>IDH Real (nos dados):</b> 0.657<br>     <b>Potencial Predito (IDH):</b> <b>0.640</b>     </div>`)[0];
+                popup_4995798ac2fb81a1772ee4bfc9aa4746.setContent(html_20ca7d9db395f9abcd3d20fd61a15e1c);
+            
+        
+
+        marker_0cfa7e19a465d86d974b600f00c3b556.bindPopup(popup_4995798ac2fb81a1772ee4bfc9aa4746)
+        ;
+
+        
+    
+    
+            marker_0cfa7e19a465d86d974b600f00c3b556.bindTooltip(
+                `<div>
+                     Quedas do Rio Chiumbe
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_0cfa7e19a465d86d974b600f00c3b556.setIcon(icon_b106750ce861a394f272d4f4ca66937a);
+            
+    
+            var marker_dcf95c490a0174d2db74bc3ccbd722b7 = L.marker(
+                [-11.883338, 21.666681],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_846985de108b60fd1c673559f01a47c7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ab1f90cc162ea33e7e486e8da5605e4e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c02d3126b2c92e352e0b0136aa2ddb22 = $(`<div id="html_c02d3126b2c92e352e0b0136aa2ddb22" style="width: 100.0%; height: 100.0%;">     <h4>📍 Parque Nacional de Cameia</h4>     <b>Província:</b> Moxico<br>     <hr>     <b>IDH Real (nos dados):</b> 0.533<br>     <b>Potencial Predito (IDH):</b> <b>0.577</b>     </div>`)[0];
+                popup_ab1f90cc162ea33e7e486e8da5605e4e.setContent(html_c02d3126b2c92e352e0b0136aa2ddb22);
+            
+        
+
+        marker_dcf95c490a0174d2db74bc3ccbd722b7.bindPopup(popup_ab1f90cc162ea33e7e486e8da5605e4e)
+        ;
+
+        
+    
+    
+            marker_dcf95c490a0174d2db74bc3ccbd722b7.bindTooltip(
+                `<div>
+                     Parque Nacional de Cameia
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_dcf95c490a0174d2db74bc3ccbd722b7.setIcon(icon_846985de108b60fd1c673559f01a47c7);
+            
+    
+            var marker_f74e8e09fcdc50d54619d8919f27afc3 = L.marker(
+                [-7.520192, 14.565103],
+                {
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var icon_468018d732f0296ec448692f411410b5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f289b84ad01192d6a570394f0c192369 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_33589be6b4bcc9ba06dd70088eeab7f2 = $(`<div id="html_33589be6b4bcc9ba06dd70088eeab7f2" style="width: 100.0%; height: 100.0%;">     <h4>📍 Grutas do Nzenzo</h4>     <b>Província:</b> Uíge<br>     <hr>     <b>IDH Real (nos dados):</b> 0.567<br>     <b>Potencial Predito (IDH):</b> <b>0.602</b>     </div>`)[0];
+                popup_f289b84ad01192d6a570394f0c192369.setContent(html_33589be6b4bcc9ba06dd70088eeab7f2);
+            
+        
+
+        marker_f74e8e09fcdc50d54619d8919f27afc3.bindPopup(popup_f289b84ad01192d6a570394f0c192369)
+        ;
+
+        
+    
+    
+            marker_f74e8e09fcdc50d54619d8919f27afc3.bindTooltip(
+                `<div>
+                     Grutas do Nzenzo
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f74e8e09fcdc50d54619d8919f27afc3.setIcon(icon_468018d732f0296ec448692f411410b5);
+            
+    
+            tile_layer_694e8944f2690d10bf7920a6474509b6.addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+                marker_0c8cd01eda88a9e1c68ceaddda11ec72.setIcon(icon_b9d66ee7843ea87cd1e04c7d8d399b49);
+            
+    
+                marker_a09b986099f6fa46522cd1e254f08e5a.setIcon(icon_7f896796ed93657d11c152e3159ccc9a);
+            
+    
+                marker_a431dcdb7ce66bb33a78796759dd0a3c.setIcon(icon_68f077c10fdf344d4f9c7a11a54a0db4);
+            
+    
+                marker_f3d3013bb68f4b2f36d974d87018d885.setIcon(icon_98e8ad296838cb6d98498258784e05b4);
+            
+    
+                marker_19ad0b860177d86bf1445d98d4189158.setIcon(icon_9c0af195a8d54e67d3d175d48cfabbb5);
+            
+    
+                marker_55add3f5136e075f9f86d2aee26caada.setIcon(icon_4addb1832f00e5b325335ee8e229b0d1);
+            
+    
+                marker_1d0a695c8230eb68bcdf21ac076145f8.setIcon(icon_92202d97eda184f5fa93dd9238d8e9f4);
+            
+    
+                marker_0e4de5e45acbc56c2b0f410ee69ac313.setIcon(icon_db10049be484c223e39b7ed096f087f5);
+            
+    
+                marker_23a54864d9b0d796158e13f97d6734ca.setIcon(icon_fd36d4b6e13d484cfbe7fe7adf8fcf76);
+            
+    
+                marker_7d2f8be66d2601bb43243563c4f9899b.setIcon(icon_90c7d9d31114ec6f3790041462f29896);
+            
+    
+                marker_e6e9fd7eab5581a9943934b240377b4f.setIcon(icon_57337bd51afce42edb4d88f50fd2ad98);
+            
+    
+                marker_0d4224e1dba097f35e7b1f05f95b8d26.setIcon(icon_fed8daadd27bb036e5a328eb200323e1);
+            
+    
+                marker_0cfa7e19a465d86d974b600f00c3b556.setIcon(icon_b106750ce861a394f272d4f4ca66937a);
+            
+    
+                marker_dcf95c490a0174d2db74bc3ccbd722b7.setIcon(icon_846985de108b60fd1c673559f01a47c7);
+            
+    
+                marker_f74e8e09fcdc50d54619d8919f27afc3.setIcon(icon_468018d732f0296ec448692f411410b5);
+            
+    
+            var tile_layer_4ddbea0c4a390ee56f57e9d487ffd517 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_4ddbea0c4a390ee56f57e9d487ffd517.addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var tile_layer_a2d6b3995c9b614286d73087281e15d9 = L.tileLayer(
+                "Stamen Terrain",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Stamen Terrain",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_a2d6b3995c9b614286d73087281e15d9.addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+        
+    
+            var layer_control_6a41b7d9a9a7cadf765ed01d5aa1365d_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_694e8944f2690d10bf7920a6474509b6,
+                    "openstreetmap" : tile_layer_4ddbea0c4a390ee56f57e9d487ffd517,
+                    "stamenterrain" : tile_layer_a2d6b3995c9b614286d73087281e15d9,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_6a41b7d9a9a7cadf765ed01d5aa1365d = L.control.layers(
+                layer_control_6a41b7d9a9a7cadf765ed01d5aa1365d_layers.base_layers,
+                layer_control_6a41b7d9a9a7cadf765ed01d5aa1365d_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_69d740a996a2aa4ce8ff20ab3fc58e21);
+
+        
+</script>
+</html>
