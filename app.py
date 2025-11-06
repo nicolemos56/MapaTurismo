@@ -2,10 +2,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 import folium
-from streamlit_folium import st_folium
+from streamlit_folium import st_folium # Componente para renderizar mapas Folium
 from pathlib import Path
 import subprocess
 import sys
+import os
+import time
 
 # ====================================================================
 # APLICAÇÃO STREAMLIT ORQUESTRADORA DO PROJETO MAPATURISMO
@@ -16,90 +18,145 @@ st.set_page_config(page_title="MapaTurismo Angola", page_icon="🗺️", layout=
 
 APP_DIR = Path(__file__).parent
 MODEL_PATH = APP_DIR / "data" / "model_inputs" / "tourism_model.pkl"
+# Precisamos dos dados originais para obter IDH real, lat/lon, etc.
+DATA_PATH = APP_DIR / "data" / "model_inputs" / "model_input.csv"
 MAIN_SCRIPT_PATH = APP_DIR / "scripts" / "main.py"
 
-# --- 2. ESTADO DA APLICAÇÃO (SETUP vs. RUN) ---
-# Usar o estado da sessão para controlar se o pipeline já foi executado
-if 'pipeline_executed' not in st.session_state:
-    st.session_state.pipeline_executed = False
+# --- 2. ESTADO DA APLICAÇÃO ---
+if 'pipeline_status' not in st.session_state:
+    st.session_state.pipeline_status = "not_run"
+if 'log_content' not in st.session_state:
+    st.session_state.log_content = ""
 
-# --- 3. FASE DE SETUP: EXECUTAR O PIPELINE DE DADOS ---
-
+# --- 3. FUNÇÃO PARA EXECUTAR O PIPELINE ---
+# (Esta função permanece a mesma da versão anterior, que já está correta)
 def run_main_pipeline():
-    """Chama o script main.py para preparar dados e treinar o modelo."""
-    st.info("Iniciando o pipeline de preparação de dados e treinamento do modelo...")
-    st.warning("Este processo pode demorar vários minutos. Por favor, aguarde.")
-    
-    log_area = st.empty()
-    log_area.code("Aguardando o início do processo...")
-
     try:
-        # Executar o main.py usando o mesmo interpretador Python
         process = subprocess.Popen(
             [sys.executable, str(MAIN_SCRIPT_PATH)],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True,
-            encoding='utf-8',
-            bufsize=1
+            bufsize=1,
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
         )
-
-        # Mostrar a saída do processo em tempo real
-        log_content = ""
-        for line in iter(process.stdout.readline, ''):
-            log_content += line
-            log_area.code(log_content)
-        
-        process.wait() # Esperar o processo terminar
-        
-        if process.returncode == 0:
-            st.success("Pipeline executado com sucesso!")
-            st.session_state.pipeline_executed = True
-            st.balloons()
-            st.button("Iniciar a Aplicação de Previsão") # Botão para recarregar a página
-        else:
-            st.error("O pipeline falhou. Verifique os logs acima para mais detalhes.")
-            st.session_state.pipeline_executed = False
-
+        for line in iter(process.stdout.readline, b''):
+            yield line.decode('utf-8', errors='replace')
+        process.stdout.close()
+        return_code = process.wait()
+        yield return_code
     except Exception as e:
-        st.error(f"Ocorreu um erro ao tentar executar o pipeline: {e}")
+        yield f"\n\n ERRO CRÍTICO AO INICIAR O PIPELINE:\n{str(e)}"
+        yield 1
 
-# Mostrar a interface de setup se o pipeline ainda não foi executado ou o modelo não existe
-if not st.session_state.pipeline_executed or not MODEL_PATH.exists():
-    st.title("Mapeador Preditivo de Turismo em Angola — Setup Inicial")
-    st.write(
-        "Bem-vindo! Antes de usar a aplicação de previsão, é necessário executar o "
-        "pipeline completo de preparação de dados e treinamento do modelo."
-    )
-    if st.button(" Iniciar Pipeline Completo"):
-        run_main_pipeline()
+# --- INTERFACE PRINCIPAL ---
 
-# --- 4. FASE DE APLICAÇÃO: EXECUTAR A INTERFACE DE PREVISÃO ---
-else:
-    st.title(" MapaTurismo — Previsão de Potencial Turístico em Angola")
+if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
+    st.title(" Previsão de Potencial de Desenvolvimento Turístico com Machine Learning — Setup Inicial")
+    st.markdown("...") # Mensagem de boas-vindas
+    st.warning("Este processo pode demorar vários minutos.")
 
-    # --- CARREGAR O MODELO (AGORA SABEMOS QUE ELE EXISTE) ---
-    @st.cache_resource
-    def carregar_pipeline(caminho_modelo):
-        return joblib.load(caminho_modelo)
+    if st.button("Iniciar Pipeline Completo", type="primary"):
+        st.session_state.pipeline_status = "running"
+        st.session_state.log_content = "Iniciando processo...\n"
+        st.rerun()
+
+    if st.session_state.pipeline_status == "running":
+        st.info("Executando o pipeline...")
+        log_placeholder = st.empty()
+        log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
+        
+        return_code = None
+        for output in run_main_pipeline():
+            if isinstance(output, str):
+                st.session_state.log_content += output
+                log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
+            else:
+                return_code = output
+
+        if return_code == 0:
+            st.session_state.pipeline_status = "success"
+        else:
+            st.session_state.pipeline_status = "failed"
+        st.rerun()
+
+    if st.session_state.pipeline_status == "success":
+        st.success("Pipeline executado com sucesso!")
+        st.balloons()
+        st.info("Recarregando para a aplicação principal...")
+        time.sleep(3)
+        st.rerun()
     
-    pipeline = carregar_pipeline(MODEL_PATH)
-    st.success("Modelo carregado com sucesso!")
+    elif st.session_state.pipeline_status == "failed":
+        st.text_area("Log Final da Execução:", st.session_state.log_content, height=400)
+        st.error("O pipeline falhou.")
 
-    # --- O RESTO DA SUA APLICAÇÃO (INTERFACE DE PREVISÃO) ---
-    st.sidebar.header("Adicionar Pontos para Previsão")
-    uploaded_file = st.sidebar.file_uploader("Carregar um ficheiro CSV", type=["csv"])
+# --- 4. FASE DE APLICAÇÃO: EXIBIÇÃO DO MAPA E PREVISÃO ---
+else:
+    st.sidebar.title("MapaTurismo")
+    st.sidebar.success("Modelo pronto e dados carregados!")
+    st.title("📊 Mapa de Potencial Turístico em Angola")
+    st.markdown("Este mapa exibe os pontos turísticos analisados, com seu potencial de desenvolvimento (IDH) previsto pelo modelo.")
 
-    # ... (cole aqui o resto do seu código da interface do app.py:
-    #      o formulário manual, a lógica de adição de dados,
-    #      a exibição da tabela, o botão de predição e o mapa)
-    # ...
-    # Exemplo:
-    with st.sidebar.form("form_manual", clear_on_submit=True):
-        st.write("**Ou adicione um ponto manualmente:**")
-        poi_nome = st.text_input("Nome do Ponto Turístico", "Ex: Praia Morena")
-        provincia = st.text_input("Província", "Benguela")
-        latitude = st.number_input("Latitude", value=-12.59, format="%.6f")
-        longitude = st.number_input("Longitude", value=13.40, format="%.6f")
-        submit_button = st.form_submit_button("Adicionar Ponto")
-        # ... (etc.)
+    # --- CARREGAR RECURSOS NECESSÁRIOS ---
+    @st.cache_resource
+    def carregar_recursos():
+        """Carrega o modelo e os dados, usando cache para performance."""
+        try:
+            pipeline = joblib.load(MODEL_PATH)
+            df_dados = pd.read_csv(DATA_PATH)
+            return pipeline, df_dados
+        except FileNotFoundError:
+            st.error("Arquivos de modelo ou dados não encontrados. Por favor, execute o pipeline novamente.")
+            st.session_state.pipeline_status = "not_run" # Força a volta para a tela de setup
+            st.rerun()
+    
+    pipeline, df = carregar_recursos()
+
+    # --- FAZER PREVISÕES (SE NECESSÁRIO) ---
+    # Rodar as previsões nos dados carregados para garantir que estão atualizadas
+    if 'idh_predito' not in df.columns:
+        predicoes = pipeline.predict(df)
+        df['idh_predito'] = predicoes
+
+    # --- LÓGICA DE CRIAÇÃO DO MAPA (COPIADA DO NOTEBOOK) ---
+    st.header("Mapa Interativo")
+    map_center = [-11.2027, 17.8739]
+    m = folium.Map(location=map_center, zoom_start=6, tiles="CartoDB positron")
+
+    def get_marker_color(idh_predito):
+        if idh_predito >= 0.8: return 'darkblue'
+        elif idh_predito >= 0.7: return 'green'
+        elif idh_predito >= 0.55: return 'orange'
+        else: return 'red'
+
+    for idx, row in df.iterrows():
+        popup_html = f"""
+        <h4>📍 {row['poi_nome']}</h4>
+        <b>Província:</b> {row['provincia']}<br>
+        <hr style='margin: 5px 0;'>
+        <b>IDH Real (dados base):</b> {row['idh']:.3f}<br>
+        <b>Potencial Predito (IDH):</b> <b style='font-size:1.1em;'>{row['idh_predito']:.3f}</b>
+        """
+        popup = folium.Popup(popup_html, max_width=300)
+        
+        folium.Marker(
+            location=[row['latitude'], row['longitude']],
+            popup=popup,
+            tooltip=f"{row['poi_nome']} (Potencial: {row['idh_predito']:.3f})",
+            icon=folium.Icon(color=get_marker_color(row['idh_predito']), icon='star')
+        ).add_to(m)
+
+    # --- EXIBIR O MAPA NO STREAMLIT ---
+    st_folium(m, width="100%", height=500)
+
+    # Adicionar uma seção para visualizar os dados
+    with st.expander("Ver Tabela de Dados e Previsões"):
+        st.dataframe(df[['poi_nome', 'provincia', 'latitude', 'longitude', 'idh', 'idh_predito']].style.format({
+            'latitude': "{:.4f}", 'longitude': "{:.4f}",
+            'idh': "{:.3f}", 'idh_predito': "{:.3f}"
+        }))
+    
+    # Botão para re-executar o pipeline
+    if st.sidebar.button("Re-executar Pipeline"):
+        st.session_state.pipeline_status = "not_run"
+        st.rerun()
