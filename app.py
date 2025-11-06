@@ -24,7 +24,7 @@ SCRIPT_PATH = ROOT_DIR / "scripts" / "main.py"
 MODEL_PATH = ROOT_DIR / "data" / "model_inputs" / "tourism_model.pkl"
 
 # ---------- EXECUTAR PIPELINE (GERAR MODELO) ----------
-st.info("🔄 A verificar se o modelo está disponível...")
+#st.info("🔄 A verificar se o modelo está disponível...")
 
 if not MODEL_PATH.exists():
     st.warning("⚙️ Modelo não encontrado — iniciando pipeline de treino...")
@@ -37,14 +37,14 @@ if not MODEL_PATH.exists():
     except Exception as e:
         st.error(f"Erro inesperado ao executar pipeline: {e}")
         st.stop()
-else:
-    st.success("✅ Modelo encontrado e pronto para uso.")
+#else:
+    #st.success("✅ Modelo encontrado e pronto para uso.")
 
 # ---------- CARREGAR MODELO ----------
 model = None
 try:
     model = joblib.load(MODEL_PATH)
-    st.success("✅ Modelo carregado com sucesso.")
+    #st.success("✅ Modelo carregado com sucesso.")
 except Exception as e:
     st.error(f"Erro ao carregar modelo: {e}")
     st.stop()
