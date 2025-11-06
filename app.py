@@ -1,204 +1,188 @@
-# app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
 import folium
 from streamlit_folium import st_folium
-from folium.plugins import MarkerCluster
-import os
-import subprocess
 from pathlib import Path
+import subprocess
+import sys
+import os
+import time
 
-# ---------- CONFIGURAÇÃO ----------
-st.set_page_config(page_title="MapaTurismo", layout="wide")
-st.title("🗺️ MapaTurismo — Previsão de Potencial Turístico")
+# ====================================================================
+# APLICAÇÃO STREAMLIT ORQUESTRADORA DO PROJETO MAPATURISMO
+# ====================================================================
 
-# Caminho base do projeto
-ROOT_DIR = Path(__file__).resolve().parent
+# --- 1. CONFIGURAÇÃO DA PÁGINA E CAMINHOS ---
+st.set_page_config(page_title="MapaTurismo Angola", page_icon="🗺️", layout="wide")
 
-# Caminho do script de treino
-SCRIPT_PATH = ROOT_DIR / "scripts" / "main.py"
+APP_DIR = Path(__file__).parent
+MODEL_PATH = APP_DIR / "data" / "model_inputs" / "tourism_model.pkl"
+DATA_PATH = APP_DIR / "data" / "model_inputs" / "model_input.csv"
+MAIN_SCRIPT_PATH = APP_DIR / "scripts" / "main.py"
 
-# Caminho do modelo (ajusta aqui se o modelo for salvo em outro local)
-MODEL_PATH = ROOT_DIR / "data" / "model_inputs" / "tourism_model.pkl"
-
-# ---------- EXECUTAR PIPELINE (GERAR MODELO) ----------
-#st.info("🔄 A verificar se o modelo está disponível...")
-
-if not MODEL_PATH.exists():
-    st.warning("⚙️ Modelo não encontrado — iniciando pipeline de treino...")
-    try:
-        subprocess.run(["python", str(SCRIPT_PATH)], check=True)
-        st.success("✅ Pipeline executado com sucesso! Modelo gerado.")
-    except subprocess.CalledProcessError as e:
-        st.error(f"Erro ao executar pipeline: {e}")
-        st.stop()
-    except Exception as e:
-        st.error(f"Erro inesperado ao executar pipeline: {e}")
-        st.stop()
-#else:
-    #st.success("✅ Modelo encontrado e pronto para uso.")
-
-# ---------- CARREGAR MODELO ----------
-model = None
-try:
-    model = joblib.load(MODEL_PATH)
-    #st.success("✅ Modelo carregado com sucesso.")
-except Exception as e:
-    st.error(f"Erro ao carregar modelo: {e}")
-    st.stop()
-
-# ---------- FUNÇÃO DE PREPARAÇÃO ----------
-def prepare_df_for_model(df_in, model_obj):
-    df = df_in.copy()
-    if "idh" in df.columns:
-        df = df.drop(columns=["idh"])
-
-    if hasattr(model_obj, "named_steps"):
-        return df
-
-    for col in df.select_dtypes(include=["object"]).columns:
-        df[col] = pd.Categorical(df[col]).codes
-
-    if hasattr(model_obj, "feature_names_in_"):
-        expected = list(model_obj.feature_names_in_)
-        for c in expected:
-            if c not in df.columns:
-                df[c] = 0
-        df = df.reindex(columns=expected, fill_value=0)
-        return df
-
-    for c in df.columns:
-        df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0)
-    return df
-
-# ---------- UPLOAD ----------
-st.header("1️⃣ Carregar dados (CSV) ou adicionar ponto manualmente")
-uploaded = st.file_uploader("Carrega um ficheiro CSV com as colunas usadas no treino (ex.: model_input.csv)", type=["csv"])
-
-if "df_input" not in st.session_state:
+# --- 2. ESTADO DA APLICAÇÃO ---
+if 'pipeline_status' not in st.session_state:
+    st.session_state.pipeline_status = "not_run"
+if 'log_content' not in st.session_state:
+    st.session_state.log_content = ""
+if 'df_input' not in st.session_state:
     st.session_state.df_input = pd.DataFrame()
-if "predicted" not in st.session_state:
-    st.session_state.predicted = False
-if "df_results" not in st.session_state:
+if 'df_results' not in st.session_state:
     st.session_state.df_results = pd.DataFrame()
 
-if uploaded:
+# --- 3. FUNÇÃO PARA EXECUTAR O PIPELINE ---
+def run_main_pipeline():
     try:
-        csv_df = pd.read_csv(uploaded)
-        csv_df.columns = csv_df.columns.str.strip().str.lower()
-        rename_map = {
-            "lat": "latitude",
-            "lon": "longitude",
-            "lat_clima": "latitude",
-            "lon_clima": "longitude"
-        }
-        csv_df.rename(columns=rename_map, inplace=True)
-        st.session_state.df_input = csv_df
-        st.success(f"CSV carregado: {csv_df.shape[0]} linhas.")
+        process = subprocess.Popen(
+            [sys.executable, str(MAIN_SCRIPT_PATH)],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1,
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
+        )
+        for line in iter(process.stdout.readline, b''):
+            yield line.decode('utf-8', errors='replace')
+        process.stdout.close()
+        yield process.wait()
     except Exception as e:
-        st.error(f"Erro ao ler CSV: {e}")
+        yield f"\n\n❌ ERRO CRÍTICO AO INICIAR O PIPELINE:\n{str(e)}"
+        yield 1
 
-# ---------- FORMULÁRIO MANUAL ----------
-with st.form("form_predicao", clear_on_submit=False):
-    st.write("Ou preenche manualmente um ponto:")
-    nome_ponto = st.text_input("Nome do Ponto Turístico", "Local Exemplo")
-    provincia = st.text_input("Província", "Luanda")
-    latitude = st.number_input("Latitude", value=-11.2, format="%.6f")
-    longitude = st.number_input("Longitude", value=17.8, format="%.6f")
-    altitude = st.number_input("Altitude (m)", value=100.0)
-    temperatura_media = st.number_input("Temperatura média (°C)", value=25.0)
-    precipitacao_anual = st.number_input("Precipitação anual (mm)", value=800.0)
-    NDVI = st.number_input("NDVI", value=0.2)
-    EVI = st.number_input("EVI", value=0.1)
-    NDWI = st.number_input("NDWI", value=0.05)
-    populacao = st.number_input("População", value=50000)
-    densidade = st.number_input("Densidade", value=300)
-    pib_per_capita = st.number_input("PIB per capita", value=2000.0)
-    taxa_urbanizacao = st.number_input("Taxa de urbanização (%)", value=45.0)
-    distancia_cidade_km = st.number_input("Distância até cidade (km)", value=50.0)
-    submitted = st.form_submit_button("Adicionar ponto")
+# --- INTERFACE PRINCIPAL ---
 
-if submitted:
-    new_row = pd.DataFrame([{
-        "nome_ponto": nome_ponto,
-        "provincia": provincia,
-        "latitude": latitude,
-        "longitude": longitude,
-        "altitude": altitude,
-        "temperatura_media": temperatura_media,
-        "precipitacao_anual": precipitacao_anual,
-        "NDVI": NDVI,
-        "EVI": EVI,
-        "NDWI": NDWI,
-        "populacao": populacao,
-        "densidade": densidade,
-        "pib_per_capita": pib_per_capita,
-        "taxa_urbanizacao": taxa_urbanizacao,
-        "distancia_cidade_km": distancia_cidade_km
-    }])
-    st.session_state.df_input = pd.concat([st.session_state.df_input, new_row], ignore_index=True)
-    st.success("✅ Ponto adicionado à tabela.")
+# --- FASE DE SETUP ---
+if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
+    st.title("🗺️ MapaTurismo — Setup Inicial")
+    st.markdown("Bem-vindo! Antes de usar a aplicação, é necessário executar o pipeline completo de preparação de dados e treinamento do modelo.")
+    st.warning("Este processo pode demorar vários minutos.")
 
-# ---------- MOSTRAR TABELA ----------
-if st.session_state.df_input.empty:
-    st.info("Tabela vazia — carrega um CSV ou adiciona pontos.")
+    if st.button("▶️ Iniciar Pipeline Completo", type="primary"):
+        st.session_state.pipeline_status = "running"
+        st.session_state.log_content = "Iniciando processo...\n"
+        st.rerun()
+    
+    if st.session_state.pipeline_status == "running":
+        st.info("Executando o pipeline...")
+        log_placeholder = st.empty()
+        log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
+        
+        return_code = None
+        for output in run_main_pipeline():
+            if isinstance(output, str):
+                st.session_state.log_content += output
+                log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
+            else:
+                return_code = output
+
+        st.session_state.pipeline_status = "success" if return_code == 0 else "failed"
+        st.rerun()
+
+    if st.session_state.pipeline_status == "success":
+        st.success("Pipeline executado com sucesso!")
+        st.balloons()
+        st.info("Recarregando para a aplicação principal...")
+        time.sleep(3)
+        st.rerun()
+    
+    elif st.session_state.pipeline_status == "failed":
+        st.text_area("Log Final da Execução:", st.session_state.log_content, height=400)
+        st.error("O pipeline falhou.")
+
+# --- FASE DE APLICAÇÃO ---
 else:
-    st.subheader("📋 Dados carregados")
-    st.dataframe(st.session_state.df_input)
+    st.sidebar.title("Análise de Potencial")
+    st.sidebar.success("Modelo pronto para uso!")
+    st.title("📊 Mapa de Potencial Turístico em Angola")
+    
+    @st.cache_resource
+    def carregar_modelo(caminho_modelo):
+        return joblib.load(caminho_modelo)
+    
+    pipeline = carregar_modelo(MODEL_PATH)
 
-# ---------- BOTÃO DE PREDIÇÃO ----------
-if st.button("🔎 Executar Predição e Mostrar Mapa"):
-    df_to_pred = st.session_state.df_input.copy()
-    if df_to_pred.empty:
-        st.warning("Nenhum dado para predizer.")
+    st.sidebar.header("Adicionar Pontos para Análise")
+    uploaded_file = st.sidebar.file_uploader("Carregar um ficheiro CSV", type=["csv"])
+    if uploaded_file:
+        df_uploaded = pd.read_csv(uploaded_file)
+        st.session_state.df_input = pd.concat([st.session_state.df_input, df_uploaded], ignore_index=True).drop_duplicates().reset_index(drop=True)
+
+    with st.sidebar.form("form_manual", clear_on_submit=True):
+        st.write("**Ou adicione um ponto manualmente:**")
+        manual_data = {
+            'poi_nome': st.text_input("Nome do Ponto Turístico", "Ex: Praia Morena"),
+            'provincia': st.text_input("Província", "Benguela"),
+            'latitude': st.number_input("Latitude", value=-12.59, format="%.6f"),
+            'longitude': st.number_input("Longitude", value=13.40, format="%.6f"),
+        }
+        submit_button = st.form_submit_button("Adicionar Ponto")
+        if submit_button:
+            st.session_state.df_input = pd.concat([st.session_state.df_input, pd.DataFrame([manual_data])], ignore_index=True)
+
+    st.header("1. Pontos para Análise")
+    if st.session_state.df_input.empty:
+        st.info("Adicione pontos para análise usando as opções na barra lateral.")
     else:
-        try:
-            df_ready = prepare_df_for_model(df_to_pred, model)
-            preds = model.predict(df_ready)
-            df_results = df_to_pred.copy()
-            df_results["pred_idh"] = preds
+        # ### FUNCIONALIDADE: TABELA DE ENTRADA RECOLHÍVEL ###
+        with st.expander("Ver/Ocultar Tabela de Pontos para Análise"):
+            st.dataframe(st.session_state.df_input)
 
-            st.session_state.df_results = df_results
-            st.session_state.predicted = True
-            st.success("✅ Predições realizadas com sucesso!")
-        except Exception as e:
-            st.error(f"Erro ao predizer com o modelo: {e}")
-
-# ---------- RESULTADOS E MAPA ----------
-if st.session_state.predicted and not st.session_state.df_results.empty:
-    df_results = st.session_state.df_results
-    st.subheader("📊 Resultados")
-    st.dataframe(df_results)
-
-    csv_bytes = df_results.to_csv(index=False).encode("utf-8")
-    st.download_button("💾 Descarregar CSV", data=csv_bytes, file_name="predicoes.csv", mime="text/csv")
-
-    if {"latitude", "longitude"}.issubset(df_results.columns):
-        st.subheader("🗺️ Mapa das Predições")
-        df_results["latitude"] = pd.to_numeric(df_results["latitude"], errors="coerce")
-        df_results["longitude"] = pd.to_numeric(df_results["longitude"], errors="coerce")
-
-        df_results = df_results.dropna(subset=["latitude", "longitude"])
-        if df_results.empty:
-            st.warning("Nenhuma coordenada válida encontrada.")
+    if not st.session_state.df_input.empty:
+        if st.button("🚀 Prever Potencial e Gerar Mapa", type="primary"):
+            with st.spinner("Realizando predições..."):
+                df_to_predict = pd.DataFrame(columns=pipeline.feature_names_in_)
+                df_to_predict = pd.concat([df_to_predict, st.session_state.df_input], ignore_index=True).fillna(0)
+                
+                predictions = pipeline.predict(df_to_predict)
+                results = st.session_state.df_input.copy()
+                results['idh_predito'] = predictions
+                st.session_state.df_results = results
+        
+    if not st.session_state.df_results.empty:
+        df_results = st.session_state.df_results
+        st.header("2. Resultados e Mapa Interativo")
+        
+        # ### FUNCIONALIDADE: SLIDER PARA FILTRAR PONTOS NA BARRA LATERAL ###
+        st.sidebar.header("Opções de Visualização")
+        max_points = len(df_results)
+        if max_points > 1:
+            top_n = st.sidebar.slider(
+                "Exibir os 'Top N' pontos da sua lista:",
+                min_value=1, max_value=max_points, value=max_points,
+                help="Filtre o mapa para mostrar apenas os locais de maior potencial da sua lista."
+            )
+            df_display = df_results.sort_values('idh_predito', ascending=False).head(top_n)
         else:
-            lat_mean = df_results["latitude"].mean()
-            lon_mean = df_results["longitude"].mean()
-            mapa = folium.Map(location=[lat_mean, lon_mean], zoom_start=6)
-            cluster = MarkerCluster().add_to(mapa)
+            df_display = df_results
+        
+        with st.expander(f"Ver Tabela de Resultados (Top {len(df_display)})", expanded=True):
+            st.dataframe(df_display.style.format({'idh_predito': "{:.3f}", 'latitude': "{:.4f}", 'longitude': "{:.4f}"}))
+            csv_bytes = df_display.to_csv(index=False).encode("utf-8")
+            st.download_button("📥 Descarregar Resultados Filtrados (CSV)", data=csv_bytes, file_name="predicoes_filtradas.csv", mime="text/csv")
+        
+        # --- LÓGICA DE CRIAÇÃO DO MAPA (SEM CLUSTER) ---
+        map_center = [-11.2027, 17.8739]
+        m = folium.Map(location=map_center, zoom_start=5, tiles="CartoDB positron")
+        
+        def get_marker_color(idh_predito):
+            if idh_predito >= 0.7: return 'green'
+            elif idh_predito >= 0.55: return 'orange'
+            else: return 'red'
 
-            for _, r in df_results.iterrows():
-                popup = f"{r.get('nome_ponto', '')}<br>IDH Previsto: {r.get('pred_idh', np.nan):.3f}"
-                folium.Marker(
-                    location=[r["latitude"], r["longitude"]],
-                    popup=popup
-                ).add_to(cluster)
+        for _, row in df_display.iterrows():
+            popup_html = f"<h4>📍 {row['poi_nome']}</h4><b>Província:</b> {row['provincia']}<br><hr style='margin: 5px 0;'><b>Potencial Predito (IDH):</b> <b style='font-size:1.1em;'>{row['idh_predito']:.3f}</b>"
+            popup = folium.Popup(popup_html, max_width=300)
+            
+            folium.Marker(
+                location=[row['latitude'], row['longitude']],
+                popup=popup,
+                tooltip=f"{row['poi_nome']} (Potencial: {row['idh_predito']:.3f})",
+                icon=folium.Icon(color=get_marker_color(row['idh_predito']), icon='star')
+            ).add_to(m) # Adiciona ao mapa diretamente
+        
+        st_folium(m, width="100%", height=600, returned_objects=[])
 
-            st_folium(mapa, width=900, height=600)
-    else:
-        st.warning("As colunas 'latitude' e 'longitude' não foram encontradas na tabela.")
-
-st.markdown("---")
-st.caption("💡 Dica: o CSV deve conter colunas 'latitude' e 'longitude' (ou 'lat_clima'/'lon_clima').")
+    if not st.session_state.df_input.empty:
+        if st.button("Limpar Pontos"):
+            st.session_state.df_input = pd.DataFrame()
+            st.session_state.df_results = pd.DataFrame()
+            st.rerun()
