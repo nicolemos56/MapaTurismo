@@ -24,9 +24,7 @@ MAIN_SCRIPT_PATH = APP_DIR / "scripts" / "main.py"
 
 # --- 2. ESTADO DA APLICAÇÃO ---
 if 'pipeline_status' not in st.session_state:
-    st.session_state.pipeline_status = "not_run"
-if 'log_content' not in st.session_state:
-    st.session_state.log_content = ""
+    st.session_state.pipeline_status = "not_run" # Estados: not_run, running, success, failed
 if 'df_input' not in st.session_state:
     st.session_state.df_input = pd.DataFrame()
 if 'df_results' not in st.session_state:
@@ -34,47 +32,47 @@ if 'df_results' not in st.session_state:
 
 # --- 3. FUNÇÃO PARA EXECUTAR O PIPELINE ---
 def run_main_pipeline():
+    """Executa o script principal e captura o resultado."""
     try:
-        process = subprocess.Popen(
+        # Usar subprocess.run para aguardar a conclusão e capturar a saída
+        result = subprocess.run(
             [sys.executable, str(MAIN_SCRIPT_PATH)],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1,
-            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
+            capture_output=True,
+            text=True,
+            encoding='utf-8',
+            errors='replace', # Lida com erros de codificação
+            check=False # Não levanta exceção automaticamente, vamos verificar o returncode
         )
-        for line in iter(process.stdout.readline, b''):
-            yield line.decode('utf-8', errors='replace')
-        process.stdout.close()
-        yield process.wait()
+        return result.returncode, result.stdout, result.stderr
     except Exception as e:
-        yield f"\n\n❌ ERRO CRÍTICO AO INICIAR O PIPELINE:\n{str(e)}"
-        yield 1
+        return 1, "", f"Erro crítico ao iniciar o subprocesso: {str(e)}"
 
 # --- INTERFACE PRINCIPAL ---
 
 # --- FASE DE SETUP ---
 if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
-    st.title("🗺️ MapaTurismo — Setup Inicial")
+    st.title("🗺️ MapaTurismo — Previsão do Potencial Turístico em Angola")
     st.markdown("Bem-vindo! Antes de usar a aplicação, é necessário executar o pipeline completo de preparação de dados e treinamento do modelo.")
     st.warning("Este processo pode demorar vários minutos.")
 
     if st.button("▶️ Iniciar Pipeline Completo", type="primary"):
         st.session_state.pipeline_status = "running"
-        st.session_state.log_content = "Iniciando processo...\n"
         st.rerun()
     
+    # ### ALTERAÇÃO: LÓGICA DE EXECUÇÃO COM SPINNER ###
     if st.session_state.pipeline_status == "running":
-        st.info("Executando o pipeline...")
-        log_placeholder = st.empty()
-        log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
-        
-        return_code = None
-        for output in run_main_pipeline():
-            if isinstance(output, str):
-                st.session_state.log_content += output
-                log_placeholder.text_area("Log da Execução:", st.session_state.log_content, height=400)
-            else:
-                return_code = output
+        # O spinner mostra a mensagem e o ícone de progresso circular
+        with st.spinner("Executando o pipeline... Por favor, aguarde. Isto pode demorar vários minutos."):
+            return_code, stdout, stderr = run_main_pipeline()
 
-        st.session_state.pipeline_status = "success" if return_code == 0 else "failed"
+            if return_code == 0:
+                st.session_state.pipeline_status = "success"
+            else:
+                # Se falhar, armazenamos o log de erro para exibi-lo
+                st.session_state.pipeline_status = "failed"
+                st.session_state.error_log = stderr if stderr else stdout
+        
+        # Após o spinner terminar, re-executamos para mostrar o resultado
         st.rerun()
 
     if st.session_state.pipeline_status == "success":
@@ -85,14 +83,14 @@ if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
         st.rerun()
     
     elif st.session_state.pipeline_status == "failed":
-        st.text_area("Log Final da Execução:", st.session_state.log_content, height=400)
-        st.error("O pipeline falhou.")
+        st.error("O pipeline falhou. Verifique os detalhes do erro abaixo:")
+        st.text_area("Log de Erro:", st.session_state.get("error_log", "Nenhum log de erro detalhado disponível."), height=300)
 
 # --- FASE DE APLICAÇÃO ---
 else:
     st.sidebar.title("Análise de Potencial")
     st.sidebar.success("Modelo pronto para uso!")
-    st.title("📊 Mapa de Potencial Turístico em Angola")
+    st.title("📊 MapaTurismo - Previsão de Potencial Turístico em Angola")
     
     @st.cache_resource
     def carregar_modelo(caminho_modelo):
@@ -122,7 +120,6 @@ else:
     if st.session_state.df_input.empty:
         st.info("Adicione pontos para análise usando as opções na barra lateral.")
     else:
-        # ### FUNCIONALIDADE: TABELA DE ENTRADA RECOLHÍVEL ###
         with st.expander("Ver/Ocultar Tabela de Pontos para Análise"):
             st.dataframe(st.session_state.df_input)
 
@@ -141,7 +138,6 @@ else:
         df_results = st.session_state.df_results
         st.header("2. Resultados e Mapa Interativo")
         
-        # ### FUNCIONALIDADE: SLIDER PARA FILTRAR PONTOS NA BARRA LATERAL ###
         st.sidebar.header("Opções de Visualização")
         max_points = len(df_results)
         if max_points > 1:
@@ -159,7 +155,6 @@ else:
             csv_bytes = df_display.to_csv(index=False).encode("utf-8")
             st.download_button("📥 Descarregar Resultados Filtrados (CSV)", data=csv_bytes, file_name="predicoes_filtradas.csv", mime="text/csv")
         
-        # --- LÓGICA DE CRIAÇÃO DO MAPA (SEM CLUSTER) ---
         map_center = [-11.2027, 17.8739]
         m = folium.Map(location=map_center, zoom_start=5, tiles="CartoDB positron")
         
@@ -177,7 +172,7 @@ else:
                 popup=popup,
                 tooltip=f"{row['poi_nome']} (Potencial: {row['idh_predito']:.3f})",
                 icon=folium.Icon(color=get_marker_color(row['idh_predito']), icon='star')
-            ).add_to(m) # Adiciona ao mapa diretamente
+            ).add_to(m)
         
         st_folium(m, width="100%", height=600, returned_objects=[])
 
