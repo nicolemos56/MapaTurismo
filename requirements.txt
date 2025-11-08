@@ -1,30 +1,26 @@
 # requirements.txt
-
-osmnx 
-geopandas 
-#pandas 
+ 
 shapely.geometry
 pathlib
-#to be continued
-# ============================================================
-#               DEPENDÊNCIAS DO PROJETO
-#      Mapeamento Preditivo do Potencial Turístico
-# ============================================================
+# --- Core para Análise de Dados e Machine Learning ---
+pandas
+numpy
+scikit-learn
+joblib
+scipy
 
-# --- Core de Análise e Manipulação de Dados ---
-pandas==2.2.2
-numpy==1.26.4
+# --- Bibliotecas para Análise Geoespacial ---
+# Atenção: a instalação destas pode ser mais complexa
+geopandas
+osmnx
+shapely
 
-# --- Machine Learning ---
-# Biblioteca principal para pré-processamento, pipelines e modelos.
-# Joblib está incluído com scikit-learn.
-scikit-learn==1.5.0
+# --- Bibliotecas para a Aplicação Web e Visualização ---
+streamlit
+folium
+streamlit-folium
+matplotlib
+seaborn
 
-# --- Visualização de Dados ---
-# Para gráficos estáticos (histogramas, importância de variáveis, etc.)
-matplotlib==3.9.0
-seaborn==0.13.2
-
-# --- Mapas Interativos ---
-# Para a criação do mapa de visualização
-folium==0.17.0
+# --- Ferramenta para Execução do Pipeline de Notebooks ---
+papermill
