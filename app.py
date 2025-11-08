@@ -22,26 +22,28 @@ MODEL_PATH = APP_DIR / "data" / "model_inputs" / "tourism_model.pkl"
 DATA_PATH = APP_DIR / "data" / "model_inputs" / "model_input.csv"
 MAIN_SCRIPT_PATH = APP_DIR / "scripts" / "main.py"
 
-# --- 2. ESTADO DA APLICAÇÃO ---
+# --- 2. ESTADO DA APLICAÇÃO E VERIFICAÇÃO INTELIGENTE ---
+# ### ALTERAÇÃO PRINCIPAL: VERIFICA SE O MODELO JÁ EXISTE NO INÍCIO ###
 if 'pipeline_status' not in st.session_state:
-    st.session_state.pipeline_status = "not_run" # Estados: not_run, running, success, failed
+    if MODEL_PATH.exists():
+        # Se o modelo já existe, pulamos o setup
+        st.session_state.pipeline_status = "success"
+    else:
+        # Se não existe, o setup é necessário
+        st.session_state.pipeline_status = "not_run"
+
 if 'df_input' not in st.session_state:
     st.session_state.df_input = pd.DataFrame()
 if 'df_results' not in st.session_state:
     st.session_state.df_results = pd.DataFrame()
 
-# --- 3. FUNÇÃO PARA EXECUTAR O PIPELINE ---
+# --- 3. FUNÇÃO PARA EXECUTAR O PIPELINE (sem alterações) ---
 def run_main_pipeline():
-    """Executa o script principal e captura o resultado."""
     try:
-        # Usar subprocess.run para aguardar a conclusão e capturar a saída
         result = subprocess.run(
             [sys.executable, str(MAIN_SCRIPT_PATH)],
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace', # Lida com erros de codificação
-            check=False # Não levanta exceção automaticamente, vamos verificar o returncode
+            capture_output=True, text=True, encoding='utf-8', errors='replace',
+            check=False
         )
         return result.returncode, result.stdout, result.stderr
     except Exception as e:
@@ -49,33 +51,27 @@ def run_main_pipeline():
 
 # --- INTERFACE PRINCIPAL ---
 
-# --- FASE DE SETUP ---
-if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
-    st.title("🗺️ MapaTurismo — Previsão do Potencial Turístico em Angola")
-    st.markdown("Bem-vindo! Antes de usar a aplicação, é necessário executar o pipeline completo de preparação de dados e treinamento do modelo.")
+# --- FASE DE SETUP (só é mostrada se o pipeline_status não for 'success') ---
+if st.session_state.pipeline_status != "success":
+    st.title("MapaTurismo — Setup Inicial")
+    st.markdown("Bem-vindo! O modelo de previsão ainda não foi treinado. É necessário executar o pipeline completo de preparação de dados e treinamento.")
     st.warning("Este processo pode demorar vários minutos.")
 
-    if st.button("▶️ Iniciar Pipeline Completo", type="primary"):
+    if st.button(" Iniciar Pipeline Completo", type="primary"):
         st.session_state.pipeline_status = "running"
         st.rerun()
     
-    # ### ALTERAÇÃO: LÓGICA DE EXECUÇÃO COM SPINNER ###
     if st.session_state.pipeline_status == "running":
-        # O spinner mostra a mensagem e o ícone de progresso circular
         with st.spinner("Executando o pipeline... Por favor, aguarde. Isto pode demorar vários minutos."):
             return_code, stdout, stderr = run_main_pipeline()
-
             if return_code == 0:
                 st.session_state.pipeline_status = "success"
             else:
-                # Se falhar, armazenamos o log de erro para exibi-lo
                 st.session_state.pipeline_status = "failed"
                 st.session_state.error_log = stderr if stderr else stdout
-        
-        # Após o spinner terminar, re-executamos para mostrar o resultado
         st.rerun()
 
-    if st.session_state.pipeline_status == "success":
+    if st.session_state.pipeline_status == "success": # Esta parte só será vista brevemente após a execução
         st.success("Pipeline executado com sucesso!")
         st.balloons()
         st.info("Recarregando para a aplicação principal...")
@@ -86,11 +82,11 @@ if st.session_state.pipeline_status != "success" or not MODEL_PATH.exists():
         st.error("O pipeline falhou. Verifique os detalhes do erro abaixo:")
         st.text_area("Log de Erro:", st.session_state.get("error_log", "Nenhum log de erro detalhado disponível."), height=300)
 
-# --- FASE DE APLICAÇÃO ---
+# --- FASE DE APLICAÇÃO (mostrada se o pipeline_status for 'success') ---
 else:
     st.sidebar.title("Análise de Potencial")
     st.sidebar.success("Modelo pronto para uso!")
-    st.title("📊 MapaTurismo - Previsão de Potencial Turístico em Angola")
+    st.title("MapaTurismo - Previsão de Potencial Turístico em Angola")
     
     @st.cache_resource
     def carregar_modelo(caminho_modelo):
@@ -124,11 +120,10 @@ else:
             st.dataframe(st.session_state.df_input)
 
     if not st.session_state.df_input.empty:
-        if st.button("🚀 Prever Potencial e Gerar Mapa", type="primary"):
+        if st.button(" Prever Potencial e Gerar Mapa", type="primary"):
             with st.spinner("Realizando predições..."):
                 df_to_predict = pd.DataFrame(columns=pipeline.feature_names_in_)
                 df_to_predict = pd.concat([df_to_predict, st.session_state.df_input], ignore_index=True).fillna(0)
-                
                 predictions = pipeline.predict(df_to_predict)
                 results = st.session_state.df_input.copy()
                 results['idh_predito'] = predictions
@@ -153,7 +148,7 @@ else:
         with st.expander(f"Ver Tabela de Resultados (Top {len(df_display)})", expanded=True):
             st.dataframe(df_display.style.format({'idh_predito': "{:.3f}", 'latitude': "{:.4f}", 'longitude': "{:.4f}"}))
             csv_bytes = df_display.to_csv(index=False).encode("utf-8")
-            st.download_button("📥 Descarregar Resultados Filtrados (CSV)", data=csv_bytes, file_name="predicoes_filtradas.csv", mime="text/csv")
+            st.download_button(" Descarregar Resultados Filtrados (CSV)", data=csv_bytes, file_name="predicoes_filtradas.csv", mime="text/csv")
         
         map_center = [-11.2027, 17.8739]
         m = folium.Map(location=map_center, zoom_start=5, tiles="CartoDB positron")
@@ -181,3 +176,9 @@ else:
             st.session_state.df_input = pd.DataFrame()
             st.session_state.df_results = pd.DataFrame()
             st.rerun()
+
+    # Botão para forçar a re-execução do pipeline
+    st.sidebar.markdown("---")
+    if st.sidebar.button("Forçar Re-execução do Pipeline"):
+        st.session_state.pipeline_status = "not_run"
+        st.rerun()
