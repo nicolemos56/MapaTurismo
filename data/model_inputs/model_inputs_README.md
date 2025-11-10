@@ -9,7 +9,7 @@ Ele serve como **entrada direta para os modelos de Machine Learning**, utilizado
 
 ---
 
-##  Estrutura do Dataset
+##  Estrutura do Dataset(principais features)
 
 Cada linha representa **um ponto turístico** de referência em Angola, com variáveis numéricas e geográficas que caracterizam o local.
 
@@ -39,11 +39,7 @@ Os dados foram consolidados a partir de múltiplas fontes reais e abertas:
 | **Socioeconômico** | Instituto Nacional de Estatística (INE) e relatórios públicos |
 | **Geoespacial** | Camadas de pontos turísticos em formato GeoJSON |
 
-###  Referências utilizadas:
-- [Instituto Nacional de Estatística de Angola (INE)](https://www.ine.gov.ao/)
-- [Angola 2014 Census (UN Stats)](https://unstats.un.org/unsd/demographic-social/census/documents/Angola/Angola%202014%20Census.pdf)
-- [Google Earth Engine](https://earthengine.google.com/)
-- [OpenStreetMap](https://www.openstreetmap.org/)
+
 
 ---
 
@@ -55,6 +51,7 @@ Este dataset foi projetado para:
 - **Gerar mapas interativos** e *insights* de desenvolvimento sustentável.
 
 ---
+
 
 ##  Exemplo de Visualização (trecho)
 
@@ -68,5 +65,11 @@ Este dataset foi projetado para:
 
 ##  Uso no Pipeline
 
-O arquivo `model_input.csv` é consumido pelo notebook:
+O arquivo `model_input.csv` é consumido pelo notebook:model_training.ipynb
+
+###  Referências utilizadas:
+- [Instituto Nacional de Estatística de Angola (INE)](https://www.ine.gov.ao/)
+- [Angola 2014 Census (UN Stats)](https://unstats.un.org/unsd/demographic-social/census/documents/Angola/Angola%202014%20Census.pdf)
+- [Google Earth Engine](https://earthengine.google.com/)
+- [OpenStreetMap](https://www.openstreetmap.org/)
 
