@@ -39,4 +39,3 @@ A principal entrega deste notebook é o ficheiro tourism_model.pkl. Este ficheir
 2. Execute as células do notebook sequencialmente.
 3. O modelo final será salvo em `models/tourism_model.pkl`.
 
----
