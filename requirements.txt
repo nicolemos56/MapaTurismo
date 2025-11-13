@@ -1,26 +1,22 @@
-# requirements.txt
- 
-shapely.geometry
-pathlib
-# --- Core para Análise de Dados e Machine Learning ---
-pandas
-numpy
-scikit-learn
-joblib
-scipy
+# Interface e Visualização
+streamlit==1.28.0
+streamlit-folium==0.15.0
+folium==0.14.0
 
-# --- Bibliotecas para Análise Geoespacial ---
-# Atenção: a instalação destas pode ser mais complexa
-geopandas
-osmnx
-shapely
+# Processamento de Dados
+numpy==1.24.3
+pandas==2.0.3
 
-# --- Bibliotecas para a Aplicação Web e Visualização ---
-streamlit
-folium
-streamlit-folium
-matplotlib
-seaborn
+# Geoespacial
+geopandas==0.14.0
+shapely==2.0.2
+osmnx==1.7.1
 
-# --- Ferramenta para Execução do Pipeline de Notebooks ---
-papermill
+# Machine Learning
+scikit-learn==1.7.1
+xgboost==2.0.1
+joblib==1.3.2
+
+# Visualização
+matplotlib==3.7.3
+seaborn==0.13.0
