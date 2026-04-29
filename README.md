@@ -14,6 +14,8 @@ A aplicação final é um dashboard interativo que permite a investidores e plan
 A forma mais simples de ver o projeto em ação é através da nossa aplicação web implementada.
 
 **URL da Aplicação:** **[http://13.222.132.210:8501/](http://13.222.132.210:8501/)**
+![Uploading image.png…]()
+
 
 *Nota: Por se tratar de um protótipo, a instância pode não estar sempre ativa.*
 
