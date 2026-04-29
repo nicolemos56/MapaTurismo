@@ -59,7 +59,7 @@ O projeto está organizado da seguinte forma para garantir modularidade e clarez
 .
 ├── app.py                  # Script principal da aplicação Streamlit
 ├── data/                   # Conjuntos de dados brutos e processados
-    ├── models/             # Modelos de Machine Learning treinados (.pkl)
+    ├── model_inputs/       # Modelos de Machine Learning treinados (.pkl)
 ├── documentation/          # Documentação técnica, relatórios e apresentações
 ├── notebooks/              # Jupyter Notebooks para análise exploratória e prototipagem
 ├── scripts/                # Scripts Python para coleta, processamento e treino
