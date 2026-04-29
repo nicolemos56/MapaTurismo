@@ -23,7 +23,7 @@ Para executar o projeto no seu próprio ambiente, siga os passos abaixo:
 
 1.  **Clone o repositório:**
     ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
+    git clone (https://github.com/nicolemos56/MapaTurismo.git)
     cd seu-repositorio
     ```
 
