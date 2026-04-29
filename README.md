@@ -48,6 +48,7 @@ Para executar o projeto no seu próprio ambiente, siga os passos abaixo:
     streamlit run app.py  # Substitua 'app.py' pelo nome do seu script principal da aplicação
     ```
 A aplicação estará disponível em `http://localhost:8501`.
+Para teste clica em>Carregar um CSV>Vá na pasta do projeto(MapaTurismo)>data>model_inputs>test.csv
 
 ---
 
