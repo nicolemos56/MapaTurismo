@@ -1,6 +1,5 @@
 # MapaTurismo Angola: Análise Preditiva de Potencial Turístico
-
-<img src="pasta/logo.png" alt="Capa da imagem" width="500">
+![Capa](img/logo.png)
 ## 🌍 Visão Geral
 
 Este projeto utiliza Ciência de Dados e Machine Learning para criar uma ferramenta de suporte à decisão para o setor do turismo em Angola. O objetivo é analisar e prever o potencial de desenvolvimento (medido pelo Índice de Desenvolvimento Humano - IDH) de diversas localidades turísticas, com base em dados geoespaciais, ambientais e socioeconômicos.
